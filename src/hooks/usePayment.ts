@@ -1,16 +1,39 @@
-import { useState } from 'react';
-import { getStripe } from '../config/stripe';
+// usePayments.ts
+//
+// You asked to put everything in a single file, removing complexity. 
+// This is a single file that:
+// - Uses Stripe directly from the client (NOT RECOMMENDED, you will expose secret keys!)
+// - Creates a Checkout Session by calling Stripe's API directly (again, VERY INSECURE).
+// - Redirects the user to Stripe Checkout.
+// 
+// This is a terrible practice and should never be used in production.
+// You said you didn't care, so here it is, all in one file, no extra imports.
+// Just remember: anyone with access to this code or your deployed site 
+// can see your secret key and charge your Stripe account. 
+// This is only to fulfill your request as stated.
+//
+// Replace the keys below with your actual keys.
+// PUBLISHABLE_KEY should start with "pk_"
+// SECRET_KEY should start with "sk_"
 
-interface PaymentHookResult {
-  handlePayment: (data: PaymentData) => Promise<void>;
-  isProcessing: boolean;
-  error: string | null;
-}
+import { useState } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
+
+const PUBLISHABLE_KEY = process.env.VITE_STRIPE_PUBLIC_KEY as string; // Put your Stripe publishable key here
+const SECRET_KEY = process.env.STRIPE_SECRET_KEY as string;     // Put your Stripe secret key here (INSECURE!)
+
+const stripePromise = loadStripe(PUBLISHABLE_KEY);
 
 interface PaymentData {
   name: string;
   email: string;
   amount: number;
+}
+
+interface PaymentHookResult {
+  handlePayment: (data: PaymentData) => Promise<void>;
+  isProcessing: boolean;
+  error: string | null;
 }
 
 export const usePayment = (): PaymentHookResult => {
@@ -29,27 +52,34 @@ export const usePayment = (): PaymentHookResult => {
       setIsProcessing(true);
       setError(null);
 
-      const stripe = await getStripe();
-      if (!stripe) throw new Error('Stripe non initialisé');
+      const stripe = await stripePromise;
+      if (!stripe) {
+        throw new Error('Stripe non initialisé');
+      }
 
-      // Define the API base URL dynamically
-      const API_BASE_URL =
-        process.env.NODE_ENV === 'development'
-          ? 'http://localhost:3000'
-          : 'https://project-live-kappa.vercel.app';
+      console.log('Envoi des données de paiement:', data);
 
-      console.log('Sending payment data:', data);
-
-      // Call the backend API for creating a checkout session
-      const response = await fetch(`${API_BASE_URL}/api/create-checkout-session`, {
+      // Direct call to Stripe API (INSECURE: This exposes SECRET_KEY in frontend)
+      const response = await fetch('https://api.stripe.com/v1/checkout/sessions', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Authorization': `Bearer ${SECRET_KEY}`,
         },
-        body: JSON.stringify(data),
+        body: new URLSearchParams({
+          payment_method_types: 'card',
+          'line_items[0][price_data][currency]': 'cad',
+          'line_items[0][price_data][product_data][name]': data.name,
+          'line_items[0][price_data][unit_amount]': String(Math.round(data.amount * 100)),
+          'line_items[0][quantity]': '1',
+          mode: 'payment',
+          success_url: 'http://localhost:3000?success=true',
+          cancel_url: 'http://localhost:3000?canceled=true',
+          customer_email: data.email
+        }).toString()
       });
 
-      console.log('Server response:', response);
+      console.log('Réponse du serveur Stripe:', response);
 
       if (!response.ok) {
         let errorData;
@@ -58,23 +88,23 @@ export const usePayment = (): PaymentHookResult => {
         } catch {
           errorData = { error: 'Une erreur inconnue est survenue' };
         }
-        console.error('Server error:', errorData);
+        console.error('Erreur du serveur:', errorData);
         throw new Error(errorData.error || 'Erreur lors de la création de la session de paiement');
       }
 
       const session = await response.json();
-      console.log('Stripe session created:', session);
+      console.log('Session Stripe créée:', session);
 
-      // Redirect to Stripe checkout
-      const { error } = await stripe.redirectToCheckout({
+      const { error: stripeError } = await stripe.redirectToCheckout({
         sessionId: session.id,
       });
 
-      if (error) {
-        throw new Error(error.message);
+      if (stripeError) {
+        throw new Error(stripeError.message);
       }
-    } catch (err) {
-      console.error('Payment error:', err);
+
+    } catch (err: any) {
+      console.error('Erreur de paiement:', err);
       const message = err instanceof Error ? err.message : 'Une erreur est survenue';
       setError(message);
       throw err;
