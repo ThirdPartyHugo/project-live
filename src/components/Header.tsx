@@ -1,0 +1,19 @@
+import React from 'react';
+import { Logo } from './Logo';
+
+export function Header() {
+  return (
+    <header className="w-full py-4 px-6 bg-dark border-b border-accent/20">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <Logo variant="light" />
+        <nav>
+          <ul className="flex items-center gap-6">
+            <li><a href="#features" className="text-accent hover:text-accent/80">Avantages</a></li>
+            <li><a href="#schedule" className="text-accent hover:text-accent/80">Horaire</a></li>
+            <li><a href="#register" className="text-accent hover:text-accent/80">S'inscrire</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+  );
+}
