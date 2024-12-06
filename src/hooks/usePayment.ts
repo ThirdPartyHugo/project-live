@@ -32,10 +32,12 @@ export const usePayment = (): PaymentHookResult => {
       const stripe = await getStripe();
       if (!stripe) throw new Error('Stripe non initialisé');
 
-      const API_BASE_URL = process.env.NODE_ENV === 'development' 
-        ? 'https://project-live-kappa.vercel.app:3001' 
-        : '';
-      
+      // Correct base URL logic
+      const API_BASE_URL =
+        process.env.NODE_ENV === 'development'
+          ? 'http://localhost:3000' // Local dev server
+          : ''; // Production base URL for Vercel
+
       console.log('Sending payment data:', data);
 
       const response = await fetch(`${API_BASE_URL}/api/create-checkout-session`, {
