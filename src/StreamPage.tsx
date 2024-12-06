@@ -1,6 +1,6 @@
 import React from 'react';
-import { Header } from '../src/components/Header';
-import { LiveStream } from '../src/components/LiveStream';
+import { Header } from './components/Header';
+import { LiveStream } from './components/LiveStream';
 import { MessageSquare, Users } from 'lucide-react';
 
 export function StreamPage() {
