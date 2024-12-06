@@ -19,8 +19,8 @@
 import { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLIC_KEY as string; // Put your Stripe publishable key here
-const SECRET_KEY = import.meta.env.STRIPE_SECRET_KEY as string;     // Put your Stripe secret key here (INSECURE!)
+const PUBLISHABLE_KEY = 'pk_live_51QBn7kI1pQH0GweMRNrHslY7L0s3a2JeTFC4tPUyOMowYZFLTuzA6LIeXz1vxISWkdQ9X7DsKUvrrF6V0i2rz4t200JsmDnWzn'; // Put your Stripe publishable key here
+const SECRET_KEY = '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';     // Put your Stripe secret key here (INSECURE!)
 
 const stripePromise = loadStripe(PUBLISHABLE_KEY);
 
