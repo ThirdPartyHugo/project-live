@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; 
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Header } from './components/Header';
 import { CountdownBanner } from './components/CountdownBanner';
 import { Hero } from './components/Hero';
@@ -18,8 +18,6 @@ function App() {
           {/* Define routes for pages */}
           <Route path="/" element={<MainPage />} />
           <Route path="/stream" element={<StreamPage />} />
-          <Route path="/api/create-checkout-session" element={<ApiHandler route="create-checkout-session" />} />
-          <Route path="/api/some-other-api" element={<ApiHandler route="some-other-api" />} />
         </Routes>
         <footer className="bg-dark text-accent/60 py-8 border-t border-accent/20">
           <div className="max-w-7xl mx-auto px-6 text-center font-mono text-sm">
@@ -39,36 +37,6 @@ function MainPage() {
       <Schedule />
       <RegistrationForm />
     </main>
-  );
-}
-
-function ApiHandler({ route }: { route: string }) {
-  // Simulate API call
-  React.useEffect(() => {
-    fetch(`/api/${route}`, { method: 'GET' })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(`Response from ${route}:`, data);
-      })
-      .catch((error) => {
-        console.error(`Error fetching ${route}:`, error);
-      });
-      fetch('/api/create-checkout-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: 'Example Product',
-          email: 'example@example.com',
-          amount: 100,
-        }),
-      });
-  }, [route]);
-
-  return (
-    <div className="text-center mt-20">
-      <h2>API: {route}</h2>
-      <p>Check the console for API response.</p>
-    </div>
   );
 }
 
