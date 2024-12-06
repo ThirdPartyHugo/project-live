@@ -32,14 +32,15 @@ export const usePayment = (): PaymentHookResult => {
       const stripe = await getStripe();
       if (!stripe) throw new Error('Stripe non initialisé');
 
-      // Correct base URL logic
+      // Base URL uses the `/api` route defined in App.tsx
       const API_BASE_URL =
         process.env.NODE_ENV === 'development'
           ? 'http://localhost:3000' // Local dev server
-          : ''; // Production base URL for Vercel
+          : ''; // Production routes are defined in App.tsx
 
       console.log('Sending payment data:', data);
 
+      // Use the custom route defined in App.tsx
       const response = await fetch(`${API_BASE_URL}/api/create-checkout-session`, {
         method: 'POST',
         headers: {
