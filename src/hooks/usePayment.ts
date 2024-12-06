@@ -33,7 +33,7 @@ export const usePayment = (): PaymentHookResult => {
       if (!stripe) throw new Error('Stripe non initialisé');
 
       const API_BASE_URL = process.env.NODE_ENV === 'development' 
-        ? 'http://localhost:3000' 
+        ? 'https://project-live-kappa.vercel.app:3001' 
         : '';
       
       console.log('Sending payment data:', data);
