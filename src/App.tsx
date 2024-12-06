@@ -53,6 +53,15 @@ function ApiHandler({ route }: { route: string }) {
       .catch((error) => {
         console.error(`Error fetching ${route}:`, error);
       });
+      fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: 'Example Product',
+          email: 'example@example.com',
+          amount: 100,
+        }),
+      });
   }, [route]);
 
   return (

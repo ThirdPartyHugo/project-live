@@ -11,10 +11,12 @@ export default async function handler(req, res) {
   try {
     const { name, email, amount } = req.body;
 
+    // Validate input data
     if (!name || !email || !amount || amount <= 0) {
       return res.status(400).json({ error: 'Invalid payment data' });
     }
 
+    // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -33,9 +35,10 @@ export default async function handler(req, res) {
       customer_email: email,
     });
 
-    res.status(200).json({ id: session.id });
+    // Send response with session ID
+    return res.status(200).json({ id: session.id });
   } catch (error) {
     console.error('Error creating Stripe session:', error.message);
-    res.status(500).json({ error: 'Failed to create checkout session' });
+    return res.status(500).json({ error: 'Failed to create checkout session' });
   }
 }
