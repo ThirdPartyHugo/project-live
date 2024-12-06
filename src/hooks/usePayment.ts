@@ -73,8 +73,8 @@ export const usePayment = (): PaymentHookResult => {
           'line_items[0][price_data][unit_amount]': String(Math.round(data.amount * 100)),
           'line_items[0][quantity]': '1',
           mode: 'payment',
-          success_url: 'http://localhost:3000?success=true',
-          cancel_url: 'http://localhost:3000?canceled=true',
+          success_url: 'https://project-live-kappa.vercel.app?success=true',
+          cancel_url: 'https://project-live-kappa.vercel.app?canceled=true',
           customer_email: data.email
         }).toString()
       });
