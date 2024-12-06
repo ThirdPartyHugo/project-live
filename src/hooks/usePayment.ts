@@ -32,6 +32,7 @@ export const usePayment = (): PaymentHookResult => {
         },
         body: JSON.stringify(data),
       });
+      
 
       if (!response.ok) {
         const errorData = await response.json();
