@@ -16,6 +16,8 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid payment data' });
     }
 
+    console.log('Received data:', { name, email, amount });
+
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -34,6 +36,8 @@ export default async function handler(req, res) {
       cancel_url: `${process.env.FRONTEND_URL}/cancel`,
       customer_email: email,
     });
+
+    console.log('Stripe session created:', session);
 
     // Send response with session ID
     return res.status(200).json({ id: session.id });
