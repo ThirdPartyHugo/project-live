@@ -67,11 +67,12 @@ export const usePayment = (): PaymentHookResult => {
           'Authorization': `Bearer ${SECRET_KEY}`,
         },
         body: new URLSearchParams({
-          payment_method_types: 'card',
+          'payment_method_types[]': 'card',
           'line_items[0][price_data][currency]': 'cad',
           'line_items[0][price_data][product_data][name]': data.name,
           'line_items[0][price_data][unit_amount]': String(Math.round(data.amount * 100)),
           'line_items[0][quantity]': '1',
+
           mode: 'payment',
           success_url: 'https://project-live-kappa.vercel.app?success=true',
           cancel_url: 'https://project-live-kappa.vercel.app?canceled=true',
