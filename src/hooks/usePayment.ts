@@ -32,15 +32,15 @@ export const usePayment = (): PaymentHookResult => {
       const stripe = await getStripe();
       if (!stripe) throw new Error('Stripe non initialisé');
 
-      // Base URL uses the `/api` route defined in App.tsx
+      // Define the API base URL dynamically
       const API_BASE_URL =
         process.env.NODE_ENV === 'development'
-          ? 'http://localhost:3000' // Local dev server
-          : ''; // Production routes are defined in App.tsx
+          ? 'http://localhost:3000'
+          : 'https://project-live-kappa.vercel.app';
 
       console.log('Sending payment data:', data);
 
-      // Use the custom route defined in App.tsx
+      // Call the backend API for creating a checkout session
       const response = await fetch(`${API_BASE_URL}/api/create-checkout-session`, {
         method: 'POST',
         headers: {
@@ -65,6 +65,7 @@ export const usePayment = (): PaymentHookResult => {
       const session = await response.json();
       console.log('Stripe session created:', session);
 
+      // Redirect to Stripe checkout
       const { error } = await stripe.redirectToCheckout({
         sessionId: session.id,
       });
