@@ -23,7 +23,7 @@ const initializeCount = async () => {
 }; 
 
 // Run the initialization on import
-initializeCount();
+initializeCount(); 
 
 // Update the count in Supabase
 export const setGlobalSuccessCount = async (value) => {
