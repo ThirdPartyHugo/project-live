@@ -74,6 +74,15 @@ export function RegistrationForm() {
   };
 
   const handleNDAAccept = () => {
+    if (currentPrice === 60) {
+      // Display error message if price is $60
+      setErrors((prev) => ({
+        ...prev,
+        price: 'Le nombre maximal de participants est atteint.',
+      }));
+      return; // Prevent transitioning to the payment step
+    }
+  
     setFormData((prev) => ({ ...prev, ndaAccepted: true }));
     setShowNDA(false);
     setCurrentStep('payment');
@@ -102,6 +111,7 @@ export function RegistrationForm() {
         // Optionally, handle the error gracefully here (e.g., show a toast or message to the user)
       });
   };
+  
   
 
   const handleSubmit = async (e: React.FormEvent) => {
