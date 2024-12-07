@@ -38,8 +38,8 @@ export default async function handler(req, res) {
         },
       ],
       mode: 'payment',
-      success_url: `${process.env.FRONTEND_URL}/success`,
-      cancel_url: `${process.env.FRONTEND_URL}/cancel`,
+      success_url: `${import.meta.env.FRONTEND_URL}/success`,
+      cancel_url: `${import.meta.env.FRONTEND_URL}/cancel`,
       customer_email: email,
     });
 
