@@ -1,19 +1,19 @@
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY); // Loaded from .env on the server side
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    res.setHeader('Allow', ['POST']);
-    return res.status(405).json({ error: `Méthode ${req.method} non autorisée` });
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const { name, email, amount } = req.body;
+
+  if (!name || !email || !amount || amount <= 0) {
+    return res.status(400).json({ error: 'Invalid data' });
   }
 
   try {
-    const { name, email, amount } = req.body;
-    if (!name || !email || !amount || amount <= 0) {
-      return res.status(400).json({ error: 'Données de paiement invalides' });
-    }
-
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [{
@@ -25,14 +25,14 @@ export default async function handler(req, res) {
         quantity: 1,
       }],
       mode: 'payment',
-      success_url: `http://localhost:3000?success=true`,
-      cancel_url: `http://localhost:3000?canceled=true`,
+      success_url: 'https://project-live-kappa.vercel.app/success', // Adjust URLs as needed
+      cancel_url: 'https://project-live-kappa.vercel.app/cancel',
       customer_email: email,
     });
 
     return res.status(200).json({ id: session.id });
   } catch (error) {
-    console.error('Erreur lors de la création de la session:', error);
-    return res.status(500).json({ error: 'Impossible de créer la session' });
+    console.error(error);
+    return res.status(500).json({ error: 'Failed to create checkout session' });
   }
 }
