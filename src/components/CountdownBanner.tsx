@@ -3,13 +3,19 @@ import { Clock } from 'lucide-react';
 import { getNextStreamDate, formatDate, formatTime } from '../utils/date';
 
 interface TimeLeft {
+  days: number;
   hours: number;
   minutes: number;
   seconds: number;
 }
 
 export function CountdownBanner() {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ hours: 0, minutes: 0, seconds: 0 });
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
   const [nextStreamDate, setNextStreamDate] = useState<string>('');
   const [nextStreamTime, setNextStreamTime] = useState<string>('');
 
@@ -22,12 +28,20 @@ export function CountdownBanner() {
 
     const calculateTimeLeft = () => {
       const difference = nextStream.getTime() - new Date().getTime();
-      
+
       if (difference > 0) {
         setTimeLeft({
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
           hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
           minutes: Math.floor((difference / 1000 / 60) % 60),
           seconds: Math.floor((difference / 1000) % 60),
+        });
+      } else {
+        setTimeLeft({
+          days: 0,
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
         });
       }
     };
@@ -55,15 +69,16 @@ export function CountdownBanner() {
               <span className="text-accent/80 font-mono">Temps restant:</span>
               <div className="flex items-center gap-1 font-mono text-lg">
                 <span className="bg-purple/20 px-2 py-1 rounded border border-purple/30">
-                  {padNumber(timeLeft.hours)}
+                  {timeLeft.days}j
                 </span>
-                <span className="text-purple">:</span>
                 <span className="bg-purple/20 px-2 py-1 rounded border border-purple/30">
-                  {padNumber(timeLeft.minutes)}
+                  {padNumber(timeLeft.hours)}h
                 </span>
-                <span className="text-purple">:</span>
                 <span className="bg-purple/20 px-2 py-1 rounded border border-purple/30">
-                  {padNumber(timeLeft.seconds)}
+                  {padNumber(timeLeft.minutes)}m
+                </span>
+                <span className="bg-purple/20 px-2 py-1 rounded border border-purple/30">
+                  {padNumber(timeLeft.seconds)}s
                 </span>
               </div>
             </div>
