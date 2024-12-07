@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 // Path to the file storing the global count
-const countFilePath = path.join(process.cwd(), 'data', 'globalSuccessCount.json');
+const countFilePath = path.join(process.cwd(), 'src', 'globalSuccessCount.json');
 
 // Load the initial value from the file (if it exists)
 let globalSuccessCount = 0;
