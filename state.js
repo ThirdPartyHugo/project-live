@@ -13,7 +13,7 @@ const initializeCount = async () => {
     .from('global_counts')
     .select('count')
     .eq('id', 1)
-    .single();
+    .single(); 
 
   if (error) {
     console.error('Error fetching global success count:', error.message);
