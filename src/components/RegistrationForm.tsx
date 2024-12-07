@@ -73,10 +73,32 @@ export function RegistrationForm() {
     }
   };
 
-  const handleNDAAccept = () => {
+  const handleNDAAccept = async () => {
     setFormData((prev) => ({ ...prev, ndaAccepted: true }));
     setShowNDA(false);
-    setCurrentStep('payment');
+
+    try {
+      // Call the backend API to update the NDA status
+      const response = await fetch('/api/updateNDA', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: formData.email }),
+      });
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        throw new Error(error || 'Failed to update NDA status.');
+      }
+
+      const { message } = await response.json();
+      console.log(message);
+
+      setCurrentStep('payment'); // Navigate to the payment step
+    } catch (err) {
+      console.error('Error updating NDA status:', err);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
