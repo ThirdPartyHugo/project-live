@@ -22,46 +22,79 @@ export function RegistrationForm() {
   });
   const [showNDA, setShowNDA] = useState(false);
   const [errors, setErrors] = useState<Partial<FormData>>({});
-  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const { currentPrice, currency } = useDynamicPrice();
   const { handlePayment, isProcessing, error: paymentError } = usePayment();
 
   const validateForm = () => {
     const newErrors: Partial<FormData> = {};
-    
     if (!validateName(formData.name)) {
       newErrors.name = 'Veuillez entrer un nom valide';
     }
     if (!validateEmail(formData.email)) {
       newErrors.email = 'Veuillez entrer un email valide';
     }
-    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (currentStep === 'personal' && validateForm()) {
-      setCurrentStep('nda');
-    } else if (currentStep === 'payment') {
+  const handlePersonalSubmit = async () => {
+    if (validateForm()) {
+      setIsSubmitting(true);
+
       try {
-        await handlePayment({
-          name: formData.name,
-          email: formData.email,
-          amount: currentPrice
+        // Call the backend API to add the user
+        const response = await fetch('/api/addUser', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+          }),
         });
+
+        if (!response.ok) {
+          const { error } = await response.json();
+          throw new Error(error || 'Failed to add user.');
+        }
+
+        const { message } = await response.json();
+        console.log(message);
+
+        setCurrentStep('nda'); // Navigate to the NDA step
       } catch (err) {
-        console.error('Erreur de paiement:', err);
+        console.error('Error during form submission:', err);
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };
 
   const handleNDAAccept = () => {
-    setFormData(prev => ({ ...prev, ndaAccepted: true }));
+    setFormData((prev) => ({ ...prev, ndaAccepted: true }));
     setShowNDA(false);
     setCurrentStep('payment');
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (currentStep === 'personal') {
+      await handlePersonalSubmit();
+    } else if (currentStep === 'payment') {
+      try {
+        await handlePayment({
+          name: formData.name,
+          email: formData.email,
+          amount: currentPrice,
+        });
+      } catch (err) {
+        console.error('Erreur de paiement:', err);
+      }
+    }
   };
 
   const renderStep = () => {
@@ -77,9 +110,10 @@ export function RegistrationForm() {
                 type="text"
                 id="name"
                 value={formData.name}
-                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
                 className="w-full px-4 py-2 bg-dark border border-accent/30 rounded-lg focus:ring-2 focus:ring-purple focus:border-transparent text-accent"
                 placeholder="Jean Dupont"
+                disabled={isSubmitting}
               />
               {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
             </div>
@@ -92,18 +126,22 @@ export function RegistrationForm() {
                 type="email"
                 id="email"
                 value={formData.email}
-                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
                 className="w-full px-4 py-2 bg-dark border border-accent/30 rounded-lg focus:ring-2 focus:ring-purple focus:border-transparent text-accent"
                 placeholder="jean@exemple.com"
+                disabled={isSubmitting}
               />
               {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
             </div>
 
             <button
-              type="submit"
-              className="w-full px-6 py-3 bg-accent text-dark rounded-lg hover:bg-accent/90 flex items-center justify-center gap-2 font-semibold"
+              type="button"
+              onClick={handlePersonalSubmit}
+              className="w-full px-6 py-3 bg-accent text-dark rounded-lg hover:bg-accent/90 flex items-center justify-center gap-2 font-semibold disabled:opacity-50"
+              disabled={isSubmitting}
             >
-              Continuer vers le NDA <ArrowRight className="h-5 w-5" />
+              {isSubmitting ? 'Enregistrement...' : 'Continuer vers le NDA'}
+              <ArrowRight className="h-5 w-5" />
             </button>
           </div>
         );
@@ -144,15 +182,19 @@ export function RegistrationForm() {
                 <CreditCard className="h-6 w-6 text-accent" />
                 <h3 className="text-lg font-semibold text-accent">Paiement Sécurisé</h3>
               </div>
-              
+
               <div className="space-y-2 mb-4">
-                <p className="text-accent">
-                  Récapitulatif de votre inscription:
-                </p>
+                <p className="text-accent">Récapitulatif de votre inscription:</p>
                 <div className="bg-dark/50 p-4 rounded-lg space-y-2 border border-accent/20">
-                  <p className="text-gray-400"><span className="font-medium text-accent">Nom:</span> {formData.name}</p>
-                  <p className="text-gray-400"><span className="font-medium text-accent">Email:</span> {formData.email}</p>
-                  <p className="text-gray-400"><span className="font-medium text-accent">NDA:</span> Accepté</p>
+                  <p className="text-gray-400">
+                    <span className="font-medium text-accent">Nom:</span> {formData.name}
+                  </p>
+                  <p className="text-gray-400">
+                    <span className="font-medium text-accent">Email:</span> {formData.email}
+                  </p>
+                  <p className="text-gray-400">
+                    <span className="font-medium text-accent">NDA:</span> Accepté
+                  </p>
                 </div>
               </div>
 
