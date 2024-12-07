@@ -1,26 +1,19 @@
-// api/create-checkout-session.js
-
 import Stripe from 'stripe';
+import { globalSuccessCount, setGlobalSuccessCount } from '../../state';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: '2022-11-15',
 });
 
 export default async function handler(req, res) {
-  console.log(`Received request: ${req.method} ${req.url}`);
-
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
-    console.error(`Method not allowed: ${req.method}`);
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const { name, email, amount } = req.body;
 
-  console.log('Received payment data:', { name, email, amount });
-
   if (!name || !email || !amount || amount <= 0) {
-    console.error('Invalid data received:', { name, email, amount });
     return res.status(400).json({ error: 'Invalid data' });
   }
 
@@ -43,11 +36,12 @@ export default async function handler(req, res) {
       customer_email: email,
     });
 
-    console.log('Stripe session created:', session.id);
+    // Increment the shared global variable
+    setGlobalSuccessCount(globalSuccessCount + 1);
 
     return res.status(200).json({ id: session.id });
   } catch (error) {
-    console.error('Error creating Stripe session:', error.message || error);
+    console.error('Error creating Stripe session:', error.message);
     return res.status(500).json({ error: 'Failed to create checkout session' });
   }
 }
