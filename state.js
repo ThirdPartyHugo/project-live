@@ -20,7 +20,7 @@ const initializeCount = async () => {
   } else {
     globalSuccessCount = data ? data.count : 0;
   }
-};
+}; 
 
 // Run the initialization on import
 initializeCount();
