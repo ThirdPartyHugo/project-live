@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   
     try {
       const basePrice = 10.00;
-      const registeredUsers = Math.floor(Math.random() * 20);
+      const registeredUsers = 0;
       const priceIncrement = 1.00;
       const currentPrice = basePrice + (registeredUsers * priceIncrement);
   
