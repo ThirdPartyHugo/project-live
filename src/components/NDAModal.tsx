@@ -102,7 +102,7 @@ export function NDAModal({ isOpen, onClose, onAccept }: NDAModalProps) {
         
         {/* Footer */}
         <div className="border-t shrink-0">
-          {hasScrolledToBottom ? (
+          
             <div className="p-6 bg-gray-50 space-y-6">
               <div>
                 <h4 className="font-semibold mb-4">Signature Électronique</h4>
@@ -126,12 +126,7 @@ export function NDAModal({ isOpen, onClose, onAccept }: NDAModalProps) {
                 </button>
               </div>
             </div>
-          ) : (
-            <div className="p-6 bg-gray-50 flex items-center gap-2 text-gray-600">
-              <AlertCircle className="h-5 w-5" />
-              <span>Veuillez lire l'intégralité du document pour continuer</span>
-            </div>
-          )}
+          
         </div>
       </div>
     </div>
