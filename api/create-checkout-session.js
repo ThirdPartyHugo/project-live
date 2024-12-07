@@ -8,7 +8,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 });
 
 // Path to the JSON file to store client data
-const clientsFilePath = path.join(process.cwd(), 'clients.json');
+const clientsFilePath = path.join(process.cwd(), 'data', 'clients.json');
+
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
