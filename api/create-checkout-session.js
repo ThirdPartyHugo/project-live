@@ -83,20 +83,16 @@ export default async function handler(req, res) {
         const currentCount = await getGlobalSuccessCount();
         await setGlobalSuccessCount(currentCount + 1);
 
-        // Add client data to Supabase
+        // Update client data in Supabase
         const { customer_email: email } = session;
-        const name = session.metadata?.name || 'Unknown';
 
-        const { error } = await supabase.from('clients').insert([
-          {
-            name,
-            email,
-            date: new Date().toISOString(),
-          },
-        ]);
+        const { error: updateError } = await supabase
+          .from('clients')
+          .update({ paid: true })
+          .eq('email', email);
 
-        if (error) {
-          console.error('Error adding client data:', error.message);
+        if (updateError) {
+          console.error('Error updating client data:', updateError.message);
         }
 
         // Redirect the user after 500ms
