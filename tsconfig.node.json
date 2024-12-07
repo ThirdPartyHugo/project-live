@@ -5,15 +5,18 @@
     "module": "ESNext",
     "skipLibCheck": true,
 
-    /* Node.js-specific */
-    "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "strict": true,
+    /* Bundler mode */
+    "moduleResolution": "node", // Use Node.js-style module resolution for serverless functions
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
 
-    /* Output settings */
-    "outDir": "dist",
-    "rootDir": "api"
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "include": ["api"]
+  "include": ["vite.config.ts", "api/**/*.ts"]
 }
