@@ -1,6 +1,4 @@
-// api/create-checkout-session.ts
-
-import { VercelRequest, VercelResponse } from '@vercel/node'; 
+import { VercelRequest, VercelResponse } from '@vercel/node';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
@@ -8,14 +6,20 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 });
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  console.log(`Received request: ${req.method} ${req.url}`);
+
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
+    console.error(`Method not allowed: ${req.method}`);
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const { name, email, amount } = req.body;
 
+  console.log('Received payment data:', { name, email, amount });
+
   if (!name || !email || !amount || amount <= 0) {
+    console.error('Invalid data received:', { name, email, amount });
     return res.status(400).json({ error: 'Invalid data' });
   }
 
@@ -38,9 +42,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       customer_email: email,
     });
 
+    console.log('Stripe session created:', session.id);
+
     return res.status(200).json({ id: session.id });
-  } catch (error) {
-    console.error('Stripe error:', error);
+  } catch (error: any) {
+    console.error('Error creating Stripe session:', error.message || error);
     return res.status(500).json({ error: 'Failed to create checkout session' });
   }
 }
