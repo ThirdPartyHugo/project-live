@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const basePrice = 10.00;
+    const basePrice = 0.50;
     const registeredUsers = await getGlobalSuccessCount(); // Fetch count on every request
     const priceIncrement = 1.00;
     const currentPrice = basePrice + (registeredUsers * priceIncrement);
