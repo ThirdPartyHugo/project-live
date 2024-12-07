@@ -50,7 +50,7 @@ export function AboutFounder() {
                 </p>
                 <div className="aspect-square relative rounded-lg overflow-hidden">
                   <img
-                    src="../11A0829C-2AED-43F4-83E2-A103E37AE5C3.jpeg"
+                    src="/11A0829C-2AED-43F4-83E2-A103E37AE5C3.jpeg"
                     alt="Zackary Perron"
                     className="object-cover w-full h-full"
                   />
