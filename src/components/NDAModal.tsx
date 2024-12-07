@@ -51,7 +51,7 @@ export function NDAModal({ isOpen, onClose, onAccept }: NDAModalProps) {
         <div 
           className="flex-1 overflow-y-auto p-6"
           onScroll={handleScroll}
-          style={{ minHeight: '200px' }}
+          style={{ minHeight: '250px' }}
         >
           <div className="prose max-w-none">
             <h3 className="text-lg font-semibold">ACCORD DE CONFIDENTIALITÉ</h3>
