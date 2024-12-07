@@ -7,6 +7,7 @@ import { Features } from './components/Features';
 import { Schedule } from './components/Schedule';
 import { RegistrationForm } from './components/RegistrationForm';
 import { StreamPage } from './pages/StreamPage';
+import { AboutFounder } from './components/AboutFounder';
 
 function App() {
   return (
@@ -35,7 +36,7 @@ function MainPage() {
     <main>
       <Hero />
       <Features />
-    
+      <AboutFounder />
       <RegistrationForm />
     </main>
   );
