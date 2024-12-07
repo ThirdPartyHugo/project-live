@@ -1,12 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 
-// Path to the file storing the global count
-const countFilePath = path.join(process.cwd(), 'api', 'data', 'globalSuccessCount.json');
+// Path to a writable temporary directory
+const countFilePath = path.join('/tmp', 'globalSuccessCount.json');
 
-// Load the initial value from the file (if it exists)
+// Initialize the global success count
 let globalSuccessCount = 0;
 
+// Load the initial value from the file (if it exists)
 if (fs.existsSync(countFilePath)) {
   try {
     const data = fs.readFileSync(countFilePath, 'utf8');
@@ -16,11 +17,10 @@ if (fs.existsSync(countFilePath)) {
   }
 }
 
-// Function to update the count
+// Update and persist the count
 export const setGlobalSuccessCount = (value) => {
   globalSuccessCount = value;
 
-  // Save the updated value to the file
   try {
     fs.writeFileSync(
       countFilePath,
@@ -31,4 +31,5 @@ export const setGlobalSuccessCount = (value) => {
   }
 };
 
+// Get the current count
 export const getGlobalSuccessCount = () => globalSuccessCount;
