@@ -15,7 +15,7 @@ export function PriceDisplay() {
         <div className="flex items-center gap-2 text-accent">
           <Users className="h-5 w-5" />
           <span className="text-sm font-mono">
-            {isLoading ? 'Chargement...' : `${registeredUsers} inscrits`}
+            {isLoading ? 'Chargement...' : `${registeredUsers}/50 inscrits`}
           </span>
         </div>
       </div>
