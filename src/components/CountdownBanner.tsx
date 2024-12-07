@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Clock } from 'lucide-react';
-import { getNextStreamDate } from '../utils/date';
+import { getNextStreamDate, formatDate, formatTime } from '../utils/date';
 
 interface TimeLeft {
   hours: number;
@@ -10,17 +10,24 @@ interface TimeLeft {
 
 export function CountdownBanner() {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ hours: 0, minutes: 0, seconds: 0 });
-  
+  const [nextStreamDate, setNextStreamDate] = useState<string>('');
+  const [nextStreamTime, setNextStreamTime] = useState<string>('');
+
   useEffect(() => {
+    const nextStream = getNextStreamDate();
+
+    // Set formatted date and time
+    setNextStreamDate(formatDate(nextStream));
+    setNextStreamTime(formatTime(nextStream));
+
     const calculateTimeLeft = () => {
-      const nextStream = getNextStreamDate();
       const difference = nextStream.getTime() - new Date().getTime();
       
       if (difference > 0) {
         setTimeLeft({
           hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
           minutes: Math.floor((difference / 1000 / 60) % 60),
-          seconds: Math.floor((difference / 1000) % 60)
+          seconds: Math.floor((difference / 1000) % 60),
         });
       }
     };
@@ -39,7 +46,9 @@ export function CountdownBanner() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Clock className="h-5 w-5" />
-            <span className="font-mono">Session spéciale: Lundi 9 décembre à 10h00</span>
+            <span className="font-mono">
+              Session spéciale: {nextStreamDate} à {nextStreamTime}
+            </span>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
