@@ -27,6 +27,7 @@ function App() {
       </div>
     </Router>
   );
+  
 }
 
 function MainPage() {
@@ -41,3 +42,11 @@ function MainPage() {
 }
 
 export default App;
+const response = await fetch('/api/create-checkout-session', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ name: 'Test Product', email: 'test@example.com', amount: 10 })
+});
+
+const session = await response.json();
+console.log(session);

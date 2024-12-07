@@ -1,13 +1,18 @@
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY); // Loaded from .env on the server side
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-export default async function handler(req, res) {
+export default async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { name, email, amount } = req.body;
+  let body = '';
+  req.on('data', chunk => { body += chunk; });
+  await new Promise(resolve => req.on('end', resolve));
+
+  const data = JSON.parse(body);
+  const { name, email, amount } = data;
 
   if (!name || !email || !amount || amount <= 0) {
     return res.status(400).json({ error: 'Invalid data' });
@@ -25,8 +30,8 @@ export default async function handler(req, res) {
         quantity: 1,
       }],
       mode: 'payment',
-      success_url: 'https://project-live-kappa.vercel.app/success', // Adjust URLs as needed
-      cancel_url: 'https://project-live-kappa.vercel.app/cancel',
+      success_url: `https://${req.headers.host}/success`,
+      cancel_url: `https://${req.headers.host}/cancel`,
       customer_email: email,
     });
 
@@ -35,4 +40,4 @@ export default async function handler(req, res) {
     console.error(error);
     return res.status(500).json({ error: 'Failed to create checkout session' });
   }
-}
+};
