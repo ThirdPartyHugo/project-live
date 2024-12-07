@@ -20,5 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "pages", "api", "api"]
+  "include": ["src", "pages"],
+  "exclude": ["api"]
 }
