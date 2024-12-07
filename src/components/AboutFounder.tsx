@@ -40,7 +40,7 @@ export function AboutFounder() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
-            <h2 className="text-3xl font-bold mb-6 text-accent">
+            <h2 className="text-3xl font-bold mb-6 text-accent text-center">
               Qui est derrière WorkEnLigne?
             </h2>
             <div className="space-y-6">
