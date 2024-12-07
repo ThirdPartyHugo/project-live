@@ -36,8 +36,8 @@ export default async function handler(req, res) {
         },
       ],
       mode: 'payment',
-      success_url: `https://project-live-kappa.vercel.app/`,
-      cancel_url: `https://project-live-kappa.vercel.app/`,
+      success_url: `www.workenligne.com/`,
+      cancel_url: `www.workenligne.com/`,
       customer_email: email,
     });
 
