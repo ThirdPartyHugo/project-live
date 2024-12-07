@@ -6,10 +6,10 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://project-live-kappa.vercel.app',
+        target: 'http://localhost:3000', // Use Vercel's dev server during local testing
         changeOrigin: true,
-        secure: false
-      }
-    }
-  }
+        secure: false,
+      },
+    },
+  },
 });
