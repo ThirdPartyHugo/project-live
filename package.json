@@ -4,12 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"vite\" \"node server.js\"",
-    "build": "tsc && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "start": "node server.js"
-  },
+  "dev": "vite",
+  "build:frontend": "vite build",
+  "build:backend": "tsc --project tsconfig.node.json",
+  "start": "vite preview",
+  "build": "npm run build:frontend && npm run build:backend"
+},
+
   "dependencies": {
     "@stripe/stripe-js": "^2.4.0",
     "@vercel/node": "^3.2.28",
