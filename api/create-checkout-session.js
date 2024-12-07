@@ -59,7 +59,7 @@ export default async function handler(req, res) {
           },
         ],
         mode: 'payment',
-        success_url: `https://www.workenligne.com/`,
+        success_url: `https://www.workenligne.com/api/create-checkout-session?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `https://www.workenligne.com/`,
         customer_email: email,
         metadata: { name }, // Pass metadata for client name
@@ -72,23 +72,13 @@ export default async function handler(req, res) {
     }
   }
 
-  if (req.method === 'POST' && req.headers['stripe-signature']) {
-    const sig = req.headers['stripe-signature'];
-    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
-    let event;
+  if (req.method === 'GET' && req.query.session_id) {
+    const { session_id } = req.query;
 
     try {
-      event = stripe.webhooks.constructEvent(req.rawBody, sig, webhookSecret);
-    } catch (err) {
-      console.error('Webhook signature verification failed:', err.message);
-      return res.status(400).send(`Webhook Error: ${err.message}`);
-    }
+      const session = await stripe.checkout.sessions.retrieve(session_id);
 
-    if (event.type === 'checkout.session.completed') {
-      const session = event.data.object;
-
-      try {
+      if (session.payment_status === 'paid') {
         // Increment the global success count
         const currentCount = await getGlobalSuccessCount();
         await setGlobalSuccessCount(currentCount + 1);
@@ -108,14 +98,17 @@ export default async function handler(req, res) {
         if (error) {
           console.error('Error adding client data:', error.message);
         }
-      } catch (err) {
-        console.error('Error processing webhook event:', err.message);
-      }
-    }
 
-    return res.status(200).json({ received: true });
+        return res.status(200).json({ message: 'Count incremented and client added successfully.' });
+      } else {
+        return res.status(400).json({ error: 'Payment not completed.' });
+      }
+    } catch (error) {
+      console.error('Error verifying session:', error.message);
+      return res.status(500).json({ error: 'Failed to verify payment session.' });
+    }
   }
 
-  res.setHeader('Allow', ['POST']);
+  res.setHeader('Allow', ['POST', 'GET']);
   return res.status(405).json({ error: `Method ${req.method} Not Allowed` });
 }
