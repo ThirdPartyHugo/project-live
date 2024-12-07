@@ -47,7 +47,7 @@ export const usePayment = (): PaymentHookResult => {
       console.log('Envoi des données de paiement au backend:', data);
 
       // Call your internal API route instead of Stripe directly.
-      const response = await fetch('/api/create-checkout-session', {
+      const response = await fetch('https://project-live-kappa.vercel.app/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
