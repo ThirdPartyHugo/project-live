@@ -38,8 +38,8 @@ export default async function handler(req, res) {
         },
       ],
       mode: 'payment',
-      success_url: `https://project-live-kappa.vercel.app/success`,
-      cancel_url: `https://project-live-kappa.vercel.app/cancel`,
+      success_url: `https://project-live-kappa.vercel.app/`,
+      cancel_url: `https://project-live-kappa.vercel.app/`,
       customer_email: email,
     });
 
