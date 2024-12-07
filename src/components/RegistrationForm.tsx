@@ -191,6 +191,7 @@ export function RegistrationForm() {
               </div>
               <p className="text-gray-400 mb-4">
                 Avant de procéder au paiement, vous devez lire et accepter notre accord de confidentialité.
+                Le NDA garantit que toutes les informations partagées restent strictement confidentielles.
               </p>
               <button
                 onClick={() => setShowNDA(true)}
