@@ -15,7 +15,7 @@
 // Replace the keys below with your actual keys.
 // PUBLISHABLE_KEY should start with "pk_"
 // SECRET_KEY should start with "sk_"
-
+require('dotenv').config()
 import { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 
