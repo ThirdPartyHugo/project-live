@@ -1,13 +1,9 @@
-// usePayments.ts
-//
-// This version calls a secure backend API route to create the Stripe session.
-// The secret key is NOT exposed here.
-// The publishable key is still needed to initialize Stripe.js on the frontend.
+// src/hooks/usePayments.ts
 
 import { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLIC_KEY; // Public key from env
+const PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
 
 const stripePromise = loadStripe(PUBLISHABLE_KEY);
 
@@ -47,7 +43,7 @@ export const usePayment = (): PaymentHookResult => {
       console.log('Envoi des données de paiement au backend:', data);
 
       // Call your internal API route instead of Stripe directly.
-      const response = await fetch('https://project-live-kappa.vercel.app/api/create-checkout-session', {
+      const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
