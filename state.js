@@ -12,7 +12,7 @@ const initializeCount = async () => {
   const { data, error } = await supabase
     .from('global_counts')
     .select('count')
-    .eq('id', 1)
+    .eq('id', 1) 
     .single(); 
 
   if (error) {
