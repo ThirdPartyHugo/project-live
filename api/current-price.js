@@ -1,4 +1,4 @@
-import { globalSuccessCount } from '../state.js';
+import { setglobalSuccessCount } from '../state.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -8,7 +8,7 @@ export default async function handler(req, res) {
 
   try {
     const basePrice = 10.00;
-    const registeredUsers = globalSuccessCount; // Use the global variable
+    const registeredUsers = setglobalSuccessCount; // Use the global variable
     const priceIncrement = 1.00;
     const currentPrice = basePrice + (registeredUsers * priceIncrement);
 
