@@ -1,14 +1,15 @@
 import Stripe from 'stripe';
-import fs from 'fs';
-import path from 'path';
+import { createClient } from '@supabase/supabase-js';
 import { getGlobalSuccessCount, setGlobalSuccessCount } from '../state.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: '2022-11-15',
 });
 
-// Path to the JSON file to store client data
-const clientsFilePath = path.join(process.cwd(), 'api', 'data', 'clients.json');
+// Supabase initialization
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_PRIVATE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -41,31 +42,22 @@ export default async function handler(req, res) {
       customer_email: email,
     });
 
-    // Increment the shared global variable
+    // Increment the global success count
     const currentCount = getGlobalSuccessCount();
-    setGlobalSuccessCount(currentCount + 1);
+    await setGlobalSuccessCount(currentCount + 1);
 
-    // Add client data to the JSON file
-    const clientData = { name, email, date: new Date().toISOString() };
+    // Add client data to Supabase
+    const { error } = await supabase.from('clients').insert([
+      {
+        name,
+        email,
+        date: new Date().toISOString(),
+      },
+    ]);
 
-    try {
-      const data = await fs.promises.readFile(clientsFilePath, 'utf8').catch((error) => {
-        if (error.code === 'ENOENT') {
-          console.log('File not found. Creating a new one...');
-          return '[]'; // Return an empty JSON array
-        }
-        throw error;
-      });
-    
-      const clients = JSON.parse(data || '[]'); // Fallback to an empty array if data is empty
-      clients.push(clientData);
-    
-      await fs.promises.writeFile(clientsFilePath, JSON.stringify(clients, null, 2));
-      console.log('Client data added successfully:', clientData);
-    } catch (error) {
-      console.error('Error handling clients file:', error);
+    if (error) {
+      console.error('Error adding client data:', error.message);
     }
-    
 
     return res.status(200).json({ id: session.id });
   } catch (error) {

@@ -1,35 +1,42 @@
-import fs from 'fs';
-import path from 'path';
+import { createClient } from '@supabase/supabase-js';
 
-// Path to a writable temporary directory
-const countFilePath = path.join('/tmp', 'globalSuccessCount.json');
+// Supabase initialization
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_PRIVATE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Initialize the global success count
-let globalSuccessCount = 0;
+let globalSuccessCount = 0; // Fallback in case of database issues
 
-// Load the initial value from the file (if it exists)
-if (fs.existsSync(countFilePath)) {
-  try {
-    const data = fs.readFileSync(countFilePath, 'utf8');
-    globalSuccessCount = JSON.parse(data).count || 0;
-  } catch (error) {
-    console.error('Error reading global success count file:', error);
-  }
-}
+// Fetch the initial count from Supabase
+const initializeCount = async () => {
+  const { data, error } = await supabase
+    .from('global_counts')
+    .select('count')
+    .eq('id', 1)
+    .single();
 
-// Update and persist the count
-export const setGlobalSuccessCount = (value) => {
-  globalSuccessCount = value;
-
-  try {
-    fs.writeFileSync(
-      countFilePath,
-      JSON.stringify({ count: globalSuccessCount }, null, 2)
-    );
-  } catch (error) {
-    console.error('Error writing global success count file:', error);
+  if (error) {
+    console.error('Error fetching global success count:', error.message);
+  } else {
+    globalSuccessCount = data ? data.count : 0;
   }
 };
 
-// Get the current count
+// Run the initialization on import
+initializeCount();
+
+// Update the count in Supabase
+export const setGlobalSuccessCount = async (value) => {
+  globalSuccessCount = value;
+
+  const { error } = await supabase
+    .from('global_counts')
+    .upsert({ id: 1, count: globalSuccessCount });
+
+  if (error) {
+    console.error('Error updating global success count:', error.message);
+  }
+};
+
+// Retrieve the count
 export const getGlobalSuccessCount = () => globalSuccessCount;

@@ -7,8 +7,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const basePrice = 0.5;
-    const registeredUsers = getGlobalSuccessCount(); // Retrieve the global variable
+    const basePrice = 0.50;
+    const registeredUsers = getGlobalSuccessCount(); // Retrieve the global count
     const priceIncrement = 1.00;
     const currentPrice = basePrice + (registeredUsers * priceIncrement);
 
