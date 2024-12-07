@@ -107,7 +107,7 @@ export function RegistrationForm() {
         console.log('NDA status updated successfully:', message);
       })
       .catch((err) => {
-        console.error('Error updating NDA status:', err);
+        
         // Optionally, handle the error gracefully here (e.g., show a toast or message to the user)
       });
   };
