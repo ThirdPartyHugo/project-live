@@ -20,7 +20,7 @@ const initializeCount = async () => {
 
   if (error) {
     console.error('Error fetching global success count:', error.message);
-    globalSuccessCount = 0; // Default to 0 on error
+    
   } else {
     globalSuccessCount = data ? data.count : 0;
   }
