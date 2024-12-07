@@ -22,6 +22,7 @@ function App() {
         </Routes>
         <footer className="bg-dark text-accent/60 py-8 border-t border-accent/20">
           <div className="max-w-7xl mx-auto px-6 text-center font-mono text-sm">
+            <p>Questions ? Contactez-nous : support@workenligne.com</p>
             <p>&copy; {new Date().getFullYear()} WorkEnLigne. All rights reserved.</p>
           </div>
         </footer>
