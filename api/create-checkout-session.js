@@ -36,8 +36,8 @@ export default async function handler(req, res) {
         },
       ],
       mode: 'payment',
-      success_url: `www.workenligne.com/`,
-      cancel_url: `www.workenligne.com/`,
+      success_url: `https://www.workenligne.com/`,
+      cancel_url: `https://www.workenligne.com/`,
       customer_email: email,
     });
 
