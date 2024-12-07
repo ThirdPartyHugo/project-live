@@ -1,15 +1,14 @@
 import Stripe from 'stripe';
 import fs from 'fs';
 import path from 'path';
-import { globalSuccessCount, setGlobalSuccessCount } from '../state.js';
+import { getGlobalSuccessCount, setGlobalSuccessCount } from '../state.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: '2022-11-15',
 });
 
 // Path to the JSON file to store client data
-const clientsFilePath = path.join(process.cwd(), 'data', 'clients.json');
-
+const clientsFilePath = path.join(process.cwd(), 'src', 'clients.json');
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -43,35 +42,30 @@ export default async function handler(req, res) {
     });
 
     // Increment the shared global variable
-    setGlobalSuccessCount(globalSuccessCount + 1);
+    const currentCount = getGlobalSuccessCount();
+    setGlobalSuccessCount(currentCount + 1);
 
     // Add client data to the JSON file
     const clientData = { name, email, date: new Date().toISOString() };
 
-    fs.readFile(clientsFilePath, 'utf8', (readError, data) => {
-      if (readError && readError.code !== 'ENOENT') {
-        console.error('Error reading clients file:', readError);
-      }
-
-      let clients = [];
-      if (!readError) {
-        try {
-          clients = JSON.parse(data);
-        } catch (parseError) {
-          console.error('Error parsing clients file:', parseError);
+    try {
+      // Ensure the clients file exists or create it
+      const data = await fs.promises.readFile(clientsFilePath, 'utf8').catch((error) => {
+        if (error.code === 'ENOENT') {
+          console.log('Clients file not found. Creating a new one...');
+          return '[]'; // Initialize with an empty JSON array
         }
-      }
+        throw error;
+      });
 
+      const clients = JSON.parse(data);
       clients.push(clientData);
 
-      fs.writeFile(clientsFilePath, JSON.stringify(clients, null, 2), (writeError) => {
-        if (writeError) {
-          console.error('Error writing to clients file:', writeError);
-        } else {
-          console.log('Client data added successfully:', clientData);
-        }
-      });
-    });
+      await fs.promises.writeFile(clientsFilePath, JSON.stringify(clients, null, 2));
+      console.log('Client data added successfully:', clientData);
+    } catch (error) {
+      console.error('Error handling clients file:', error);
+    }
 
     return res.status(200).json({ id: session.id });
   } catch (error) {
