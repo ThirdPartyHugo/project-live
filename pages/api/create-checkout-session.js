@@ -1,8 +1,16 @@
+import { useState } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY); // Loaded from .env on the server side
+const PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
 
-export default async function handler(req, res) {
+// The Stripe secret key should be stored in a .env file and never exposed to the client.
+// This line will only work on the server side. On the client side, process.env won't have this value.
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY; 
+
+// Initialize Stripe on the server side
+const stripe = stripeSecretKey ? new Stripe(stripeSecretKey) : null;
+export async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -11,6 +19,10 @@ export default async function handler(req, res) {
 
   if (!name || !email || !amount || amount <= 0) {
     return res.status(400).json({ error: 'Invalid data' });
+  }
+
+  if (!stripe) {
+    return res.status(500).json({ error: 'Stripe not configured' });
   }
 
   try {
@@ -25,7 +37,7 @@ export default async function handler(req, res) {
         quantity: 1,
       }],
       mode: 'payment',
-      success_url: 'https://project-live-kappa.vercel.app/success', // Adjust URLs as needed
+      success_url: 'https://project-live-kappa.vercel.app/success',
       cancel_url: 'https://project-live-kappa.vercel.app/cancel',
       customer_email: email,
     });
