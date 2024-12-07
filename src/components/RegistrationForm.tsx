@@ -137,9 +137,9 @@ export function RegistrationForm() {
               type="button"
               onClick={handlePersonalSubmit} // Call the function when button is clicked
               className="w-full px-6 py-3 bg-accent text-dark rounded-lg hover:bg-accent/90 flex items-center justify-center gap-2 font-semibold disabled:opacity-50"
-              
+              disabled={isSubmitting}
             >
-              
+              {isSubmitting ? 'Enregistrement...' : 'Continuer vers le NDA'}
               <ArrowRight className="h-5 w-5" />
             </button>
           </div>
