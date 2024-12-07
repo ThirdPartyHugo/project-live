@@ -19,7 +19,7 @@ const initializeCount = async () => {
     console.error('Error fetching global success count:', error.message);
   } else {
     globalSuccessCount = data ? data.count : 0;
-  }
+  } 
 }; 
 
 // Run the initialization on import
