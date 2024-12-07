@@ -99,13 +99,48 @@ export default async function handler(req, res) {
           console.error('Error adding client data:', error.message);
         }
 
-        return res.status(200).json({ message: 'Count incremented and client added successfully.' });
+        // Redirect the user after 500ms
+        const defaultUrl = "https://www.workenligne.com/";
+        return res.status(200).send(`
+          <html>
+            <head>
+              <title>Payment Successful</title>
+              <meta http-equiv="refresh" content="0.5;url=${defaultUrl}" />
+              <script>
+                setTimeout(() => {
+                  window.location.href = "${defaultUrl}";
+                }, 500);
+              </script>
+            </head>
+            <body>
+              <p>Payment successful! Redirecting...</p>
+            </body>
+          </html>
+        `);
       } else {
-        return res.status(400).json({ error: 'Payment not completed.' });
+        return res.status(400).send(`
+          <html>
+            <head>
+              <title>Payment Not Completed</title>
+            </head>
+            <body>
+              <p>Payment not completed. Please try again.</p>
+            </body>
+          </html>
+        `);
       }
     } catch (error) {
       console.error('Error verifying session:', error.message);
-      return res.status(500).json({ error: 'Failed to verify payment session.' });
+      return res.status(500).send(`
+        <html>
+          <head>
+            <title>Error</title>
+          </head>
+          <body>
+            <p>Failed to verify payment session. Please contact support.</p>
+          </body>
+        </html>
+      `);
     }
   }
 
