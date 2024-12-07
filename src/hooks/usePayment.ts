@@ -1,5 +1,3 @@
-// src/hooks/usePayments.ts
-
 import { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 
@@ -42,7 +40,7 @@ export const usePayment = (): PaymentHookResult => {
 
       console.log('Envoi des données de paiement au backend:', data);
 
-      // Call your internal API route instead of Stripe directly.
+      // Call your internal API route without specifying a port.
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
