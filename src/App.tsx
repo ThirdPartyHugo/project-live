@@ -6,7 +6,7 @@ import { Hero } from './components/Hero';
 import { Features } from './components/Features';
 import { Schedule } from './components/Schedule';
 import { RegistrationForm } from './components/RegistrationForm';
-import { StreamPage } from './StreamPage';
+import { StreamPage } from './pages/StreamPage';
 
 function App() {
   return (
