@@ -61,7 +61,7 @@ export function CountdownBanner() {
           <div className="flex items-center gap-2">
             <Clock className="h-5 w-5" />
             <span className="font-mono">
-              Session spéciale: {nextStreamDate} à {nextStreamTime}
+              Prochaine Session: {nextStreamDate} à {nextStreamTime}am
             </span>
           </div>
           <div className="flex items-center gap-4">

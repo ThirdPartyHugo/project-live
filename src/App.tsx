@@ -35,7 +35,7 @@ function MainPage() {
     <main>
       <Hero />
       <Features />
-      <Schedule />
+    
       <RegistrationForm />
     </main>
   );

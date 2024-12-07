@@ -17,7 +17,7 @@ export function Hero() {
               Sessions Exclusives de Marketing Digital
             </h1>
             <p className="text-lg mb-8 text-gray-400 font-mono">
-              Rejoignez un cercle exclusif de professionnels qui comprennent la valeur de l'expertise concrète. Places limitées.
+            Rejoignez des sessions livestreams de travail en temps réel avancé dans le domaine du marketing digital
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a 
