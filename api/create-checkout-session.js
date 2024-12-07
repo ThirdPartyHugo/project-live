@@ -1,11 +1,12 @@
-import { VercelRequest, VercelResponse } from '@vercel/node';
+// api/create-checkout-session.js
+
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: '2023-10-16',
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: '2022-11-15',
 });
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req, res) {
   console.log(`Received request: ${req.method} ${req.url}`);
 
   if (req.method !== 'POST') {
@@ -45,7 +46,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.log('Stripe session created:', session.id);
 
     return res.status(200).json({ id: session.id });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error creating Stripe session:', error.message || error);
     return res.status(500).json({ error: 'Failed to create checkout session' });
   }
