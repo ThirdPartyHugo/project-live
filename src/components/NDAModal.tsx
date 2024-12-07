@@ -54,50 +54,78 @@ export function NDAModal({ isOpen, onClose, onAccept }: NDAModalProps) {
           style={{ minHeight: '250px' }}
         >
           <div className="prose max-w-none">
-            <h3 className="text-lg font-semibold">ACCORD DE CONFIDENTIALITÉ</h3>
-            <p className="text-gray-600">
-              Cet accord de non-divulgation (l'"Accord") est conclu entre WorkEnLigne ("Société") 
-              et le participant soussigné ("Participant") concernant l'accès aux sessions de diffusion en direct 
-              présentant le travail client et les flux de travail professionnels.
-            </p>
-            
-            <h4 className="font-semibold mt-4">1. Informations Confidentielles</h4>
-            <p className="text-gray-600">
-              Toutes les informations partagées pendant les sessions en direct, y compris mais sans s'y limiter, 
-              les projets clients, les flux de travail, les méthodologies et les pratiques commerciales, 
-              seront considérées comme des Informations Confidentielles.
-            </p>
-            
-            <h4 className="font-semibold mt-4">2. Non-Divulgation</h4>
-            <p className="text-gray-600">
-              Le Participant s'engage à ne pas partager, distribuer ou divulguer de quelque manière que ce soit 
-              les Informations Confidentielles obtenues lors des sessions à des tiers sans l'autorisation écrite 
-              explicite de la Société.
-            </p>
-            
-            <h4 className="font-semibold mt-4">3. Interdiction d'Enregistrement</h4>
-            <p className="text-gray-600">
-              Le Participant s'engage à ne pas enregistrer, capturer ou reproduire toute partie des sessions 
-              de diffusion en direct sous quelque forme ou support que ce soit.
-            </p>
-            
-            <h4 className="font-semibold mt-4">4. Durée</h4>
-            <p className="text-gray-600">
-              Cet Accord restera en vigueur indéfiniment à partir de la date d'acceptation.
-            </p>
-
-            <h4 className="font-semibold mt-4">5. Sanctions</h4>
-            <p className="text-gray-600">
-              Toute violation de cet accord pourra entraîner des poursuites judiciaires et le paiement 
-              de dommages et intérêts, ainsi que l'exclusion immédiate des sessions.
-            </p>
-
-            <h4 className="font-semibold mt-4">6. Juridiction</h4>
-            <p className="text-gray-600">
-              Le présent accord est régi par les lois en vigueur au Canada. Tout litige sera soumis 
-              à la juridiction exclusive des tribunaux compétents de Montréal.
-            </p>
-          </div>
+  <h3 className="text-lg font-semibold">ACCORD DE CONFIDENTIALITÉ</h3>
+  <p className="text-gray-600">
+    Cet Accord de Non-Divulgation ("Accord") est conclu entre WorkEnLigne ("Partie Divulgatrice")
+    et le Participant soussigné ("Partie Réceptrice") concernant l'accès aux sessions exclusives 
+    organisées par WorkEnLigne. En acceptant cet Accord, le Participant reconnaît l'importance 
+    de protéger les informations confidentielles et stratégiques partagées lors des sessions.
+  </p>
+  
+  <h4 className="font-semibold mt-4">1. Objet de l'Accord</h4>
+  <p className="text-gray-600">
+    L'Accord vise à protéger les informations confidentielles partagées lors des sessions en direct,
+    notamment des données stratégiques, des méthodologies propriétaires, et des projets clients,
+    afin de garantir leur non-divulgation et leur utilisation appropriée.
+  </p>
+  
+  <h4 className="font-semibold mt-4">2. Définitions des Informations Confidentielles</h4>
+  <p className="text-gray-600">
+    Les Informations Confidentielles incluent, mais ne se limitent pas à :
+  </p>
+  <ul className="text-gray-600">
+    <li>Données clients : campagnes, performances, et stratégies publicitaires.</li>
+    <li>Méthodologies propriétaires : outils, scripts, modèles, et workflows.</li>
+    <li>Secrets commerciaux : listes de clients, pratiques tarifaires, et documents stratégiques.</li>
+    <li>Contenu des sessions : vidéos, discussions, supports, et tout matériel partagé.</li>
+    <li>Tout autre élément identifié comme "confidentiel" par WorkEnLigne.</li>
+  </ul>
+  
+  <h4 className="font-semibold mt-4">3. Obligations du Participant</h4>
+  <p className="text-gray-600">
+    Le Participant s'engage à :
+  </p>
+  <ul className="text-gray-600">
+    <li>Ne pas divulguer les Informations Confidentielles à des tiers sans autorisation écrite préalable.</li>
+    <li>Ne pas utiliser les Informations Confidentielles à des fins autres que l'apprentissage personnel.</li>
+    <li>Ne pas enregistrer, capturer ou reproduire tout contenu des sessions sous quelque forme que ce soit.</li>
+    <li>Protéger les Informations Confidentielles contre tout accès non autorisé.</li>
+    <li>Ne pas utiliser les Informations Confidentielles pour développer ou promouvoir des produits ou services concurrents pendant une période de 5 ans.</li>
+  </ul>
+  
+  <h4 className="font-semibold mt-4">4. Durée et Validité</h4>
+  <p className="text-gray-600">
+    Cet Accord prend effet à compter de la date de signature et reste valide indéfiniment, sauf résiliation
+    écrite par WorkEnLigne.
+  </p>
+  
+  <h4 className="font-semibold mt-4">5. Sanctions</h4>
+  <p className="text-gray-600">
+    En cas de violation de cet Accord, WorkEnLigne se réserve le droit de :
+  </p>
+  <ul className="text-gray-600">
+    <li>Exclure immédiatement le Participant des sessions actuelles et futures sans remboursement.</li>
+    <li>Engager des poursuites judiciaires pour demander des dommages-intérêts et couvrir les pertes subies.</li>
+    <li>Imposer une pénalité de 50,000 CAD pour chaque violation constatée.</li>
+  </ul>
+  
+  <h4 className="font-semibold mt-4">6. Exceptions à la Confidentialité</h4>
+  <p className="text-gray-600">
+    Les obligations de confidentialité ne s'appliquent pas aux informations :
+  </p>
+  <ul className="text-gray-600">
+    <li>Déjà connues du public avant leur divulgation.</li>
+    <li>Devenues publiques sans faute de la Partie Réceptrice.</li>
+    <li>Développées indépendamment par la Partie Réceptrice sans utiliser les Informations Confidentielles.</li>
+    <li>Révélées en vertu d'une exigence légale ou judiciaire, à condition que WorkEnLigne soit informée à l'avance.</li>
+  </ul>
+  
+  <h4 className="font-semibold mt-4">7. Juridiction</h4>
+  <p className="text-gray-600">
+    Cet Accord est régi par les lois du Canada, et tout litige sera soumis à la juridiction exclusive des tribunaux
+    de Montréal, Québec.
+  </p>
+</div>
         </div>
         
         {/* Footer */}
