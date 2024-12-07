@@ -77,7 +77,32 @@ export function RegistrationForm() {
     setFormData((prev) => ({ ...prev, ndaAccepted: true }));
     setShowNDA(false);
     setCurrentStep('payment');
+  
+    // Make the API call after transitioning to the payment step
+    fetch('/api/updateNDA', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: formData.email }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then(({ error }) => {
+            throw new Error(error || 'Failed to update NDA status.');
+          });
+        }
+        return response.json();
+      })
+      .then(({ message }) => {
+        console.log('NDA status updated successfully:', message);
+      })
+      .catch((err) => {
+        console.error('Error updating NDA status:', err);
+        // Optionally, handle the error gracefully here (e.g., show a toast or message to the user)
+      });
   };
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
