@@ -49,23 +49,23 @@ export default async function handler(req, res) {
     const clientData = { name, email, date: new Date().toISOString() };
 
     try {
-      // Ensure the clients file exists or create it
       const data = await fs.promises.readFile(clientsFilePath, 'utf8').catch((error) => {
         if (error.code === 'ENOENT') {
-          console.log('Clients file not found. Creating a new one...');
-          return '[]'; // Initialize with an empty JSON array
+          console.log('File not found. Creating a new one...');
+          return '[]'; // Return an empty JSON array
         }
         throw error;
       });
-
-      const clients = JSON.parse(data);
+    
+      const clients = JSON.parse(data || '[]'); // Fallback to an empty array if data is empty
       clients.push(clientData);
-
+    
       await fs.promises.writeFile(clientsFilePath, JSON.stringify(clients, null, 2));
       console.log('Client data added successfully:', clientData);
     } catch (error) {
       console.error('Error handling clients file:', error);
     }
+    
 
     return res.status(200).json({ id: session.id });
   } catch (error) {
