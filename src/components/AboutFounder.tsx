@@ -37,44 +37,46 @@ export function AboutFounder() {
 
   return (
     <section id="about" className="py-20 bg-dark border-t border-accent/20">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <h2 className="text-3xl font-bold mb-6 text-accent text-center">
-              Qui est derrière WorkEnLigne?
-            </h2>
-            <div className="space-y-6">
-              <div className="bg-dark/50 p-6 rounded-lg border border-accent/20">
-                <p className="text-accent text-lg mb-4">
-                  Je m'appelle Zack, j'ai 24 ans, je suis dans le Marketing depuis 2018
-                </p>
-                <div className="aspect-square relative rounded-lg overflow-hidden">
-                  <img
-                    src="https://storage.googleapis.com/msgsndr/TGSQy13Dr8TSrXnuMyTd/media/6754c43153bb95309da70791.jpeg"
-                    alt="Zackary Perron"
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-              </div>
+  <div className="max-w-7xl mx-auto px-6">
+    <div className="flex flex-col items-center mb-12">
+      <h2 className="text-3xl font-bold text-accent text-center">
+        Qui est derrière WorkEnLigne?
+      </h2>
+    </div>
+    <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <div className="space-y-6">
+          <div className="bg-dark/50 p-6 rounded-lg border border-accent/20">
+            <p className="text-accent text-lg mb-4">
+              Je m'appelle Zack, j'ai 24 ans, je suis dans le Marketing depuis 2018
+            </p>
+            <div className="aspect-square relative rounded-lg overflow-hidden">
+              <img
+                src="https://storage.googleapis.com/msgsndr/TGSQy13Dr8TSrXnuMyTd/media/6754c43153bb95309da70791.jpeg"
+                alt="Zackary Perron"
+                className="object-cover w-full h-full"
+              />
             </div>
-          </div>
-          
-          <div className="grid sm:grid-cols-2 gap-6">
-            {achievements.map((achievement, index) => (
-              <div
-                key={index}
-                className="bg-dark/50 p-6 rounded-lg border border-accent/20 hover:border-accent/40 transition-colors"
-              >
-                <div className="mb-4">{achievement.icon}</div>
-                <h3 className="text-xl font-semibold mb-2 text-accent">
-                  {achievement.title}
-                </h3>
-                <p className="text-gray-400">{achievement.description}</p>
-              </div>
-            ))}
           </div>
         </div>
       </div>
-    </section>
+      <div className="grid sm:grid-cols-2 gap-6">
+        {achievements.map((achievement, index) => (
+          <div
+            key={index}
+            className="bg-dark/50 p-6 rounded-lg border border-accent/20 hover:border-accent/40 transition-colors"
+          >
+            <div className="mb-4">{achievement.icon}</div>
+            <h3 className="text-xl font-semibold mb-2 text-accent">
+              {achievement.title}
+            </h3>
+            <p className="text-gray-400">{achievement.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
   );
 }
