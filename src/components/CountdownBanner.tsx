@@ -68,16 +68,16 @@ export function CountdownBanner() {
             <div className="flex items-center gap-2">
               <span className="text-accent/80 font-mono">Temps restant:</span>
               <div className="flex items-center gap-1 font-mono text-lg">
-                <span className="bg-purple/20 px-2 py-1 rounded border border-purple/30">
+                <span className="bg-purple/20 px-2 py-1 rounded border border-purple/30 text-red-500">
                   {timeLeft.days}j
                 </span>
-                <span className="bg-purple/20 px-2 py-1 rounded border border-purple/30">
+                <span className="bg-purple/20 px-2 py-1 rounded border border-purple/30 text-red-500">
                   {padNumber(timeLeft.hours)}h
                 </span>
-                <span className="bg-purple/20 px-2 py-1 rounded border border-purple/30">
+                <span className="bg-purple/20 px-2 py-1 rounded border border-purple/30 text-red-500">
                   {padNumber(timeLeft.minutes)}m
                 </span>
-                <span className="bg-purple/20 px-2 py-1 rounded border border-purple/30">
+                <span className="bg-purple/20 px-2 py-1 rounded border border-purple/30 text-red-500">
                   {padNumber(timeLeft.seconds)}s
                 </span>
               </div>
