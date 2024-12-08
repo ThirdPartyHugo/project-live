@@ -13,7 +13,7 @@ export function Header() {
         <nav>
           <ul className="flex items-center gap-6">
             <li><a href="#features" className="text-accent hover:text-accent/80">Avantages</a></li>
-            <li><a href="#about" className="text-accent hover:text-accent/80">À propos</a></li>
+            <li><a href="#about" className="text-accent hover:text-accent/80">Info</a></li>
             <li><a href="#register" className="text-accent hover:text-accent/80">S'inscrire</a></li>
           </ul>
         </nav>
