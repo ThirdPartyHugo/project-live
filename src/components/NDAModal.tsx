@@ -59,8 +59,8 @@ export function NDAModal({ isOpen, onClose, onAccept }: NDAModalProps) {
           className="flex-1 overflow-y-auto p-6"
           onScroll={handleScroll}
           style={{
-            minHeight: '200px',
-            maxHeight: 'calc(100vh - 240px)', // Ensure content fits below header and footer
+            minHeight: '200px !important',
+            maxHeight: 'calc(100vh - 240px) !important', // Ensure content fits below header and footer
           }}
         >
           <div className="prose max-w-none">
