@@ -20,12 +20,13 @@ export function Hero() {
             Rejoignez des sessions livestreams de travail en temps réel avancé dans le domaine du marketing digital
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <a 
-                href="#register" 
-                className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-accent text-dark font-mono font-semibold hover:bg-accent/90 transition-colors"
-              >
-                Réserver Ma Place
-              </a>
+            <a 
+  href="#register" 
+  className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-accent text-dark font-mono font-semibold hover:bg-accent/90 transition-all duration-200 transform hover:scale-105"
+>
+  Réserver Ma Place
+</a>
+
               <a 
                 href="#about" 
                 className="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-accent/30 text-accent font-mono hover:bg-accent/10 transition-colors"
