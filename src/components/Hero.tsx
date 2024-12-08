@@ -27,10 +27,10 @@ export function Hero() {
                 Réserver Ma Place
               </a>
               <a 
-                href="#schedule" 
+                href="#about" 
                 className="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-accent/30 text-accent font-mono hover:bg-accent/10 transition-colors"
               >
-                Voir l'Horaire
+                À propos
               </a>
             </div>
           </div>
