@@ -1,9 +1,9 @@
 export default async function handler(req, res) {
     if (req.method === 'POST') {
-      const { token,id} = req.body;
+      const { id } = req.body;
   
-      if (!token) {
-        return res.status(400).json({ error: 'Token and roomName are required' });
+      if (!id) {
+        return res.status(400).json({ error: 'User ID is required' });
       }
   
       try {
@@ -26,21 +26,27 @@ export default async function handler(req, res) {
         const { data } = await response.json();
   
         // Check if any rooms are currently active
-        if (!data || data.length === 0) {
+        if (!data || Object.keys(data).length === 0) {
+          // No active rooms; allow the user to pass
           return res.status(200).json({ active: false, message: 'No active rooms' });
         }
   
-        // Find the specified room in the response
-        const roomPresence = data.find((room) => room.room_name === "WorkEnLigne_Webinars");
+        // Look for the room 'WorkEnLigne_Webinars' in the response
+        const roomPresence = data['WorkEnLigne_Webinars'];
   
         if (!roomPresence) {
-          return res.status(404).json({ active: false, error: 'Room not found or inactive' });
+          return res.status(200).json({ active: false, message: 'Room not currently active' });
         }
   
-        // Check if the token is already active in the room
-        const isActive = roomPresence.users.some((user) => user.userId === id);
+        // Check if the userId is already active in the room
+        const isActive = roomPresence.some((user) => user.userId === id);
   
-        return res.status(200).json({ active: isActive });
+        if (isActive) {
+          return res.status(403).json({ active: true, error: 'User already in session' });
+        }
+  
+        // Allow the user to proceed if not active
+        return res.status(200).json({ active: false, message: 'User allowed to join' });
       } catch (error) {
         console.error('Error checking presence:', error.message);
         return res.status(500).json({ error: 'Internal server error' });
