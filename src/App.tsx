@@ -18,7 +18,7 @@ function App() {
         <Routes>
           {/* Define routes for pages */}
           <Route path="/" element={<MainPage />} />
-          <Route path="/stream" element={<StreamPage />} />
+          <Route path="https://www.workenligne.com/stream" element={<StreamPage />} />
         </Routes>
         <footer className="bg-dark text-accent/60 py-8 border-t border-accent/20">
           <div className="max-w-7xl mx-auto px-6 text-center font-mono text-sm">
