@@ -1,82 +1,90 @@
-import React, { useEffect, useRef } from 'react';
-import { AlertCircle } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface LiveStreamProps {
-  streamKey?: string;
-  serverUrl?: string;
+  token?: string; // Daily token
 }
 
-export function LiveStream({ streamKey, serverUrl }: LiveStreamProps) {
-  const videoRef = useRef<HTMLVideoElement>(null);
+export const LiveStream = React.forwardRef<HTMLIFrameElement, LiveStreamProps>(
+  ({ token }, ref) => {
+    const [sessionActive, setSessionActive] = useState<boolean | null>(null);
 
-  useEffect(() => {
-    if (!streamKey || !serverUrl || !videoRef.current) {
-      return;
-    }
+    useEffect(() => {
+      const checkSession = async () => {
+        if (!token) {
+          setSessionActive(false);
+          return;
+        }
 
-    const video = videoRef.current;
-    
-    // Create a new MediaSource instance
-    const mediaSource = new MediaSource();
-    video.src = URL.createObjectURL(mediaSource);
-
-    mediaSource.addEventListener('sourceopen', () => {
-      // Connect to the custom flux server
-      const ws = new WebSocket(serverUrl);
-      
-      ws.onopen = () => {
-        // Send stream key for authentication
-        ws.send(JSON.stringify({ type: 'auth', streamKey }));
-      };
-
-      ws.onmessage = (event) => {
         try {
-          const data = JSON.parse(event.data);
-          
-          if (data.type === 'stream-data') {
-            // Handle incoming stream data
-            const sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42E01E,mp4a.40.2"');
-            sourceBuffer.appendBuffer(data.buffer);
-          }
+          // Replace with your backend endpoint to check session
+          const response = await fetch('/api/check-session', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ token }),
+          });
+
+          const result = await response.json();
+          setSessionActive(result.active); // Backend should return { active: true/false }
         } catch (error) {
-          console.error('Error processing stream data:', error);
+          console.error('Error checking session:', error);
+          setSessionActive(false);
         }
       };
 
-      ws.onerror = (error) => {
-        console.error('WebSocket error:', error);
-      };
-    });
+      checkSession();
+    }, [token]);
 
-    return () => {
-      // Cleanup
-      if (video.src) {
-        URL.revokeObjectURL(video.src);
-      }
-    };
-  }, [streamKey, serverUrl]);
-
-  if (!streamKey || !serverUrl) {
-    return (
-      <div className="flex items-center justify-center h-[400px] bg-gray-100 rounded-lg">
-        <div className="text-center p-6">
-          <AlertCircle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold mb-2">Stream Not Available</h3>
-          <p className="text-gray-600">Please check your stream credentials or try again later.</p>
+    if (sessionActive === null) {
+      return (
+        <div className="flex items-center justify-center h-[400px] bg-gray-100 rounded-lg">
+          <div className="text-center p-6">
+            <p className="text-gray-600">Checking session...</p>
+          </div>
         </div>
+      );
+    }
+
+    if (!sessionActive) {
+      return (
+        <div className="flex items-center justify-center h-[400px] bg-gray-100 rounded-lg">
+          <div className="text-center p-6">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-12 w-12 text-yellow-500 mx-auto mb-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <h3 className="text-lg font-semibold mb-2">Access Denied</h3>
+            <p className="text-gray-600">Session already active or invalid token.</p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
+        <iframe
+          ref={ref}
+          title="Live Stream"
+          className="w-full h-full"
+          src={`https://workenligne.daily.co/WorkEnLigne_Webinars?t=${token}`}
+          frameBorder="0"
+          allow="camera; microphone; fullscreen; autoplay"
+          allowFullScreen
+        ></iframe>
       </div>
     );
   }
+);
 
-  return (
-    <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
-      <video
-        ref={videoRef}
-        className="w-full h-full"
-        controls
-        autoPlay
-        playsInline
-      />
-    </div>
-  );
-}
+LiveStream.displayName = 'LiveStream';
