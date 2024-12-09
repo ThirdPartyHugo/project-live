@@ -1,12 +1,12 @@
-const express = require('express');
 const axios = require('axios');
-
-const app = express();
-app.use(express.json());
 
 const DAILY_API_KEY = 'a348147f7783ebb909804647f627bde3d873524b919f41370182acc58f9d96fc';
 
-app.post('/api/check-session', async (req, res) => {
+module.exports = async (req, res) => {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   const { token } = req.body;
 
   if (!token) {
@@ -27,11 +27,9 @@ app.post('/api/check-session', async (req, res) => {
     // Check if the token's `user_id` is already active
     const isActive = participants.some((participant) => participant.token === token);
 
-    res.json({ active: isActive });
+    res.status(200).json({ active: isActive });
   } catch (error) {
     console.error('Error checking session:', error.message);
     res.status(500).json({ active: false, error: 'Failed to check session' });
   }
-});
-
-app.listen(3000, () => console.log('Server running on port 3000'));
+};
