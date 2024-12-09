@@ -10,8 +10,8 @@ export default async function handler(req, res) {
         const DAILY_API_KEY = 'a348147f7783ebb909804647f627bde3d873524b919f41370182acc58f9d96fc';
         const roomName = 'WorkEnLigne_Webinars'; // Replace with your room name
   
-        // Fetch participants in the room
-        const response = await fetch(`https://api.daily.co/v1/rooms/${roomName}/participants`, {
+        // Fetch presence information for the room
+        const response = await fetch(`https://api.daily.co/v1/presence/${roomName}`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${DAILY_API_KEY}`,
@@ -20,18 +20,18 @@ export default async function handler(req, res) {
   
         if (!response.ok) {
           const errorData = await response.json();
-          console.error('Error fetching participants:', errorData);
-          return res.status(500).json({ error: 'Failed to fetch participants' });
+          console.error('Error fetching presence:', errorData);
+          return res.status(response.status).json({ error: errorData.error });
         }
   
-        const { participants } = await response.json();
+        const { users } = await response.json();
   
-        // Check if the token's `user_id` is already active
-        const isActive = participants.some((participant) => participant.token === token);
+        // Check if the token is already active
+        const isActive = users.some((user) => user.token === token);
   
         return res.status(200).json({ active: isActive });
       } catch (error) {
-        console.error('Error checking session:', error.message);
+        console.error('Error checking presence:', error.message);
         return res.status(500).json({ error: 'Internal server error' });
       }
     }
