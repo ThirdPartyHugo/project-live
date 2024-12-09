@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-    if (req.method === 'POST') {
+    if (req.method === 'GET') {
       const { id } = req.body;
   
       console.log(id);
