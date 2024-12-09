@@ -29,7 +29,7 @@ export default async function handler(req, res) {
         // Check if any rooms are currently active
         if (!data || Object.keys(data).length === 0) {
           // No active rooms; allow the user to pass
-          return res.status(200).json({ active: true, message: 'No active rooms' });
+          return res.status(200).json({ active: false, message: 'No active rooms' });
         }
   
         // Look for the room 'WorkEnLigne_Webinars' in the response
