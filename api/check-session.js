@@ -37,6 +37,11 @@ export default async function handler(req, res) {
           return res.status(200).json({ active: false, message: 'Room not currently active' });
         }
   
+        // Check if there are no participants in the room
+        if (roomPresence.length === 0) {
+          return res.status(200).json({ active: false, message: 'User allowed to join as first participant' });
+        }
+  
         // Check if the userId is already active in the room
         const isActive = roomPresence.some((participant) => participant.userId === id);
   
