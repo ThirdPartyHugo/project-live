@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
     if (req.method === 'POST') {
-      const { token} = req.body;
+      const { token,id} = req.body;
   
       if (!token) {
         return res.status(400).json({ error: 'Token and roomName are required' });
@@ -38,7 +38,7 @@ export default async function handler(req, res) {
         }
   
         // Check if the token is already active in the room
-        const isActive = roomPresence.users.some((user) => user.token === token);
+        const isActive = roomPresence.users.some((user) => user.userId === id);
   
         return res.status(200).json({ active: isActive });
       } catch (error) {
