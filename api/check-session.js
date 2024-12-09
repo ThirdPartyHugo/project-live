@@ -2,7 +2,7 @@ export default async function handler(req, res) {
     if (req.method === 'POST') {
       const { token } = req.body;
   
-      if (!token || !roomName) {
+      if (!token) {
         return res.status(400).json({ error: 'Token and roomName are required' });
       }
   
