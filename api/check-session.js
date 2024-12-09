@@ -30,26 +30,21 @@ export default async function handler(req, res) {
           return res.status(200).json({ active: false, message: 'No active rooms' });
         }
   
-        // Extract the room's participants
-        const roomPresence = data['WorkEnLigne_Webinars'];
+        // Iterate over all active rooms to check for the userId
+        for (const roomName in data) {
+          const roomPresence = data[roomName];
   
-        if (!roomPresence) {
-          return res.status(200).json({ active: false, message: 'Room not currently active' });
+          // Check if the room has participants
+          if (roomPresence && roomPresence.length > 0) {
+            const isActive = roomPresence.some((participant) => participant.userId === id);
+  
+            if (isActive) {
+              return res.status(403).json({ active: true, error: 'User already in session' });
+            }
+          }
         }
   
-        // Check if there are no participants in the room
-        if (roomPresence.length === 0) {
-          return res.status(200).json({ active: false, message: 'User allowed to join as first participant' });
-        }
-  
-        // Check if the userId is already active in the room
-        const isActive = roomPresence.some((participant) => participant.userId === id);
-  
-        if (isActive) {
-          return res.status(403).json({ active: true, error: 'User already in session' });
-        }
-  
-        // Allow the user to proceed if not active
+        // If no matching userId is found, allow the user to join
         return res.status(200).json({ active: false, message: 'User allowed to join' });
       } catch (error) {
         console.error('Error checking presence:', error.message);
