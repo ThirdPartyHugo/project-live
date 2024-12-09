@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 interface LiveStreamProps {
   token?: string; // Daily token
+  id?: string; // Daily token
 }
 
 export const LiveStream = React.forwardRef<HTMLIFrameElement, LiveStreamProps>(
-  ({ token }, ref) => {
+  ({ token,id }, ref) => {
     const [sessionActive, setSessionActive] = useState<boolean | null>(null);
 
     useEffect(() => {
@@ -22,7 +23,7 @@ export const LiveStream = React.forwardRef<HTMLIFrameElement, LiveStreamProps>(
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ token }),
+            body: JSON.stringify({ id }),
           });
 
           const result = await response.json();

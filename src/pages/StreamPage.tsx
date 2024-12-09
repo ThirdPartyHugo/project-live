@@ -9,6 +9,7 @@ export function StreamPage() {
   // Extract token from URL query parameters
   const urlParams = new URLSearchParams(window.location.search);
   const token = urlParams.get('t'); // The token parameter
+  const id = urlParams.get('id'); // The token parameter
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -21,6 +22,7 @@ export function StreamPage() {
               <LiveStream 
                 ref={liveStreamRef} 
                 token={token} // Pass the token to the LiveStream component
+                id={id}
               />
               <div className="mt-4">
                 <h2 className="font-semibold mb-2">About This Session</h2>
