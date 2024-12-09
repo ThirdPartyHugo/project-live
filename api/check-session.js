@@ -2,7 +2,6 @@ export default async function handler(req, res) {
     if (req.method === 'POST') {
       const { id } = req.body;
   
-      
       if (!id) {
         return res.status(400).json({ error: 'User ID is required' });
       }
@@ -24,15 +23,14 @@ export default async function handler(req, res) {
           return res.status(response.status).json({ error: errorData.error });
         }
   
-        const { data } = await response.json();
+        const data = await response.json();
   
         // Check if any rooms are currently active
         if (!data || Object.keys(data).length === 0) {
-          // No active rooms; allow the user to pass
           return res.status(200).json({ active: false, message: 'No active rooms' });
         }
   
-        // Look for the room 'WorkEnLigne_Webinars' in the response
+        // Extract the room's participants
         const roomPresence = data['WorkEnLigne_Webinars'];
   
         if (!roomPresence) {
@@ -40,7 +38,7 @@ export default async function handler(req, res) {
         }
   
         // Check if the userId is already active in the room
-        const isActive = roomPresence.some((user) => user.userId === id);
+        const isActive = roomPresence.some((participant) => participant.userId === id);
   
         if (isActive) {
           return res.status(403).json({ active: true, error: 'User already in session' });
