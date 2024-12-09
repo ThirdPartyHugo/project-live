@@ -52,7 +52,7 @@ export const LiveStream = React.forwardRef<HTMLIFrameElement, LiveStreamProps>(
       );
     }
 
-    if (!sessionActive) {
+    if (sessionActive) {
       return (
         <div className="flex items-center justify-center h-[400px] bg-gray-100 rounded-lg">
           <div className="text-center p-6">
