@@ -27,7 +27,7 @@ export default async function handler(req, res) {
   
         // Check if any rooms are currently active
         if (!data || data.length === 0) {
-          return res.status(200).json({ active: true, message: 'No active rooms' });
+          return res.status(200).json({ active: false, message: 'No active rooms' });
         }
   
         // Find the specified room in the response
