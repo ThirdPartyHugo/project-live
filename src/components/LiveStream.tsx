@@ -2,22 +2,22 @@ import React, { useEffect, useState } from 'react';
 
 interface LiveStreamProps {
   token?: string; // Daily token
-  id?: string; // Daily token
+  id?: string; // User ID
 }
 
 export const LiveStream = React.forwardRef<HTMLIFrameElement, LiveStreamProps>(
-  ({ token,id }, ref) => {
+  ({ token, id }, ref) => {
     const [sessionActive, setSessionActive] = useState<boolean | null>(null);
 
     useEffect(() => {
       const checkSession = async () => {
-        if (!token) {
+        if (!token || !id) {
+          console.error('Token or User ID is missing.');
           setSessionActive(false);
           return;
         }
 
         try {
-          // Replace with your backend endpoint to check session
           const response = await fetch('/api/check-session', {
             method: 'POST',
             headers: {
@@ -27,6 +27,11 @@ export const LiveStream = React.forwardRef<HTMLIFrameElement, LiveStreamProps>(
           });
 
           const result = await response.json();
+
+          if (result.error) {
+            console.error(result.error);
+          }
+
           setSessionActive(result.active); // Backend should return { active: true/false }
         } catch (error) {
           console.error('Error checking session:', error);
@@ -35,7 +40,7 @@ export const LiveStream = React.forwardRef<HTMLIFrameElement, LiveStreamProps>(
       };
 
       checkSession();
-    }, [token]);
+    }, [token, id]); // Depend on both token and id
 
     if (sessionActive === null) {
       return (
@@ -67,6 +72,17 @@ export const LiveStream = React.forwardRef<HTMLIFrameElement, LiveStreamProps>(
             </svg>
             <h3 className="text-lg font-semibold mb-2">Access Denied</h3>
             <p className="text-gray-600">Session already active or invalid token.</p>
+          </div>
+        </div>
+      );
+    }
+
+    if (!token) {
+      return (
+        <div className="flex items-center justify-center h-[400px] bg-gray-100 rounded-lg">
+          <div className="text-center p-6">
+            <h3 className="text-lg font-semibold mb-2">Invalid Token</h3>
+            <p className="text-gray-600">Please provide a valid token to access the livestream.</p>
           </div>
         </div>
       );
