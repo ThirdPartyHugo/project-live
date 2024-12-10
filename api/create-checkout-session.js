@@ -1,9 +1,11 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+require('dotenv').config();
+
 
 // Supabase initialization
 const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind4bmhlaGZva3hyd2J1dHZwc295Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMzU0NjE0OSwiZXhwIjoyMDQ5MTIyMTQ5fQ.gOF0Y2EunAdA_rjaVSPDZRkfIaCeVvwspxHZukTYHLA";
+const supabaseKey = process.env.SUPABASE_PRIVATE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {

@@ -7,7 +7,7 @@ export default async function handler(req, res) {
       }
   
       try {
-        const DAILY_API_KEY = 'a348147f7783ebb909804647f627bde3d873524b919f41370182acc58f9d96fc';
+        const DAILY_API_KEY = process.env.DAILY_API_KEY;
   
         // Fetch presence information for all active rooms
         const response = await fetch(`https://api.daily.co/v1/presence`, {
